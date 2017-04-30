@@ -21,50 +21,10 @@
 
 				if(item.setfood == true)
 					document.getElementById("calories").innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>\u{1F355}</font>" + addCommas(item.food);
-				if(item.setfood == true)
-					document.getElementById("test").innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>\u{1F377}</font>" + addCommas(item.food);
-				if(item.setfood == true)
-					document.getElementById("test2").innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>\u{1F6BE}</font>" + addCommas(item.food);
-				if(item.addcalories == true){
-					$(".tiny").remove();
-
-					var element = $("<div class='tiny'>+<font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>\u{1F355}</font>"+addCommas(item.calories)+"</div>")
-					$("#food").append(element)
-
-					setTimeout(function(){
-						$(element).fadeOut(600, function() { $(this).remove(); })
-					}, 1000)
-				}
-				if(item.removecalories == true){
-					$(".tiny").remove();
-					
-					var element = $("<div class='tiny'>-<font style='color: rgb(250, 0, 0); font-weight: 700; margin-right: 6px;'>\u{1F355}</font>"+addCommas(item.calories)+"</div>")
-					$("#food").append(element)
-
-					setTimeout(function(){
-						$(element).fadeOut(600, function() { $(this).remove(); })
-					}, 1000)
-				}
-				if(item.removecalories == true){
-					$(".tiny").remove();
-					
-					var element = $("<div class='tiny'>-<font style='color: rgb(250, 0, 0); font-weight: 700; margin-right: 6px;'>\u{1F377}</font>"+addCommas(item.calories)+"</div>")
-					$("#water").append(element)
-
-					setTimeout(function(){
-						$(element).fadeOut(600, function() { $(this).remove(); })
-					}, 1000)
-				}
-				if(item.removecalories == true){
-					$(".tiny").remove();
-					
-					var element = $("<div class='tiny'>-<font style='color: rgb(250, 0, 0); font-weight: 700; margin-right: 6px;'>\u{1F6BE}</font>"+addCommas(item.calories)+"</div>")
-					$("#food").append(element)
-
-					setTimeout(function(){
-						$(element).fadeOut(600, function() { $(this).remove(); })
-					}, 1000)
-				}
+				if(item.setwater == true)
+					document.getElementById("water").innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>\u{1F377}</font>" + addCommas(item.water);
+				if(item.setneeds == true)
+					document.getElementById("wc").innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>\u{1F6BE}</font>" + addCommas(item.needs);
 				if(item.removeStartWindow == true){
 					$("#starter").remove();
 				}
@@ -96,7 +56,7 @@
 			 1px 1px 0 #000;
 				}
 
-		#water {
+		#thirst {
 			font-family: pcdown;
 			font-size: 2rem;
 			color: white;
@@ -149,16 +109,16 @@
 		</div>
 	</div>
 	<div id="container2">
-		<div id="water">
+		<div id="thirst">
 
-			<div id="test"/>
+			<div id="water"/>
 
 		</div>
 	</div>
 	<div id="container3">
-		<div id="food">
+		<div id="needs">
 
-			<div id="test2"/>
+			<div id="wc"/>
 
 		</div>
 	</div>

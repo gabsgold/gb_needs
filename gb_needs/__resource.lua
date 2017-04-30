@@ -6,5 +6,5 @@ files {
 	'pdown.ttf'
 }
 
-client_script "client.lua"
-server_script "server.lua"
+client_script "needs_cl.lua"
+server_script "needs_sv.lua"
