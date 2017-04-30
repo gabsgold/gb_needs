@@ -1,7 +1,7 @@
 # gb_needs
 Dependencies = ESSENTIALMODE
 
-#Commands
+#Commands = 
 /boire
 /manger
 /pipi
