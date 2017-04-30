@@ -82,3 +82,48 @@ AddEventHandler("gabs:remove_needs", function(wc)
 		wc = wc
 	})
 end)
+-- EMOTES
+RegisterNetEvent('gabs:drink')
+AddEventHandler('gabs:drink', function()
+	ped = GetPlayerPed(-1)
+	if ped then
+		Citizen.CreateThread(function()
+			RequestAnimDict('amb@world_human_drinking_fat@beer@male@idle_a')
+		    local pedid = PlayerPedId()
+			TaskPlayAnim(pedid, 'amb@world_human_drinking_fat@beer@male@idle_a', 'idle_a', 8.0, -8, -1, 16, 0, 0, 0, 0)
+			Citizen.Wait(5000)
+			ClearPedTasks(ped)
+		end)
+	end
+end)
+
+RegisterNetEvent('gabs:eat')
+AddEventHandler('gabs:eat', function()
+	ped = GetPlayerPed(-1)
+	if ped then
+		Citizen.CreateThread(function()
+			RequestAnimDict('amb@code_human_wander_eating_donut@male@idle_a')
+		    local pedid = PlayerPedId()
+			TaskPlayAnim(pedid, 'amb@code_human_wander_eating_donut@male@idle_a', 'idle_c', 8.0, -8, -1, 16, 0, 0, 0, 0)
+			Citizen.Wait(5000)
+			ClearPedTasks(ped)
+		end)
+	end
+end)
+
+RegisterNetEvent('gabs:pee')
+AddEventHandler('gabs:pee', function()
+	ped = GetPlayerPed(-1)
+	if ped then
+		Citizen.CreateThread(function()
+			RequestAnimDict('misscarsteal2peeing')
+		    local pedid = PlayerPedId()
+			TaskPlayAnim(pedid, 'misscarsteal2peeing', 'peeing_intro', 8.0, -8, -1, 16, 0, 0, 0, 0)
+			Citizen.Wait(5000)
+			TaskPlayAnim(pedid, 'misscarsteal2peeing', 'peeing_loop', 8.0, -8, -1, 16, 0, 0, 0, 0)
+			Citizen.Wait(5000)
+			TaskPlayAnim(pedid, 'misscarsteal2peeing', 'peeing_outro', 8.0, -8, -1, 16, 0, 0, 0, 0)
+			ClearPedTasks(ped)
+		end)
+	end
+end)
