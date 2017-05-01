@@ -1,3 +1,16 @@
+local rpdfirstspawn = 0
+AddEventHandler('playerSpawned', function(spawn)
+	if rpdfirstspawn == 0 then
+		rpdfirstspawn = 1
+	else
+		TriggerServerEvent('gabs:setdefaultneeds')
+	end
+end)
+
+RegisterNetEvent('gabs:needskill')
+AddEventHandler('gabs:needskill', function()
+	SetEntityHealth(GetPlayerPed(-1), 0)
+end)
 -- FOOD
 RegisterNetEvent('gabs:setfood')
 AddEventHandler('gabs:setfood', function(food)

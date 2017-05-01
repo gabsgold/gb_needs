@@ -1,13 +1,13 @@
 require "resources/essentialmode/lib/MySQL"
-MySQL:open("127.0.0.1", "gta5_gamemode_essential", "root", "monpasse")
+MySQL:open("127.0.0.1", "gta5_gamemode_essential", "root", "gabstheboss")
 -- PARAMS
-local malusfood = 10
+local malusfood = 1
 local bonusfood = 100
-local maluswater = 20
+local maluswater = 2
 local bonuswater = 100
 local malusneeds = 100
-local bonusneeds = 10
-local timingsave = 600000
+local bonusneeds = 1
+local timingsave = 10000
 -- CHECK NEEDS
 function checkneeds(player)
   local executed_query = MySQL:executeQuery("SELECT * FROM users WHERE identifier = '@name'", {['@name'] = player})
@@ -32,6 +32,8 @@ function addcalories(player, calories)
   local new_food = food + calories
   if(tonumber(new_food) >= tonumber(bonusfood)) then
 	new_food = bonusfood
+  elseif(tonumber(new_food) <= 0) then
+    new_food = 0
   end
   MySQL:executeQuery("UPDATE users SET `food`='@value' WHERE identifier = '@identifier'", {['@value'] = new_food, ['@identifier'] = player})
 end
@@ -39,11 +41,16 @@ end
 function removecalories(player, calories)
   local food, water, needs = table.unpack{checkneeds(player)}
   local new_food = food - calories
+  if(tonumber(new_food) >= tonumber(bonusfood)) then
+	new_food = bonusfood
+  elseif(tonumber(new_food) <= 0) then
+    new_food = 0
+  end
   MySQL:executeQuery("UPDATE users SET `food`='@value' WHERE identifier = '@identifier'", {['@value'] = new_food, ['@identifier'] = player})
 end
 
 RegisterServerEvent('gabs:removecalories')
-AddEventHandler('gabs:removecalories', function(source, calories)
+AddEventHandler('gabs:removecalories', function(calories)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -54,11 +61,7 @@ AddEventHandler('gabs:removecalories', function(source, calories)
 --        TriggerClientEvent("gabs:remove_calories", source, calories)
         CancelEvent()
 		if(tonumber(new_food) <= 0) then
-			TriggerClientEvent('es_admin:kill', source)
-			setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-			TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-			TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-			TriggerClientEvent("gabs:setneeds", source, 0)
+			TriggerClientEvent('gabs:needskill', source)
 			CancelEvent()
 		end
       else
@@ -69,7 +72,7 @@ AddEventHandler('gabs:removecalories', function(source, calories)
 end)
 
 RegisterServerEvent('gabs:addcalories')
-AddEventHandler('gabs:addcalories', function(source, calories)
+AddEventHandler('gabs:addcalories', function(calories)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -82,11 +85,7 @@ AddEventHandler('gabs:addcalories', function(source, calories)
 		TriggerClientEvent("gabs:eat", source)
         CancelEvent()
 		if(tonumber(new_food) <= 0) then
-			TriggerClientEvent('es_admin:kill', source)
-			setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-			TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-			TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-			TriggerClientEvent("gabs:setneeds", source, 0)
+			TriggerClientEvent('gabs:needskill', source)
 			CancelEvent()
 		end
       else
@@ -95,21 +94,14 @@ AddEventHandler('gabs:addcalories', function(source, calories)
       end
   end)
 end)
-
-TriggerEvent('es:addCommand', 'manger', function(source, args, user)
-	if(tonumber(args[2])) then
-		local calories = tonumber(args[2])
-		TriggerEvent('gabs:addcalories', source, calories)
-	else
-		TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "Exemple : /manger 50")
-	end
-end)
 -- WATER
 function addwater(player, waterdrops)
   local food, water, needs = table.unpack{checkneeds(player)}
   local new_water = water + waterdrops
   if(tonumber(new_water) >= tonumber(bonuswater)) then
 	new_water = bonuswater
+  elseif(tonumber(new_water) <= 0) then
+    new_water = 0
   end
   MySQL:executeQuery("UPDATE users SET `water`='@value' WHERE identifier = '@identifier'", {['@value'] = new_water, ['@identifier'] = player})
 end
@@ -117,11 +109,16 @@ end
 function removewater(player, waterdrops)
   local food, water, needs = table.unpack{checkneeds(player)}
   local new_water = water - waterdrops
+  if(tonumber(new_water) >= tonumber(bonuswater)) then
+	new_water = bonuswater
+  elseif(tonumber(new_water) <= 0) then
+    new_water = 0
+  end
   MySQL:executeQuery("UPDATE users SET `water`='@value' WHERE identifier = '@identifier'", {['@value'] = new_water, ['@identifier'] = player})
 end
 
 RegisterServerEvent('gabs:removewater')
-AddEventHandler('gabs:removewater', function(source, waterdrops)
+AddEventHandler('gabs:removewater', function(waterdrops)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -132,11 +129,7 @@ AddEventHandler('gabs:removewater', function(source, waterdrops)
 --        TriggerClientEvent("gabs:remove_water", source, waterdrops)
         CancelEvent()
 		if(tonumber(new_water) <= 0) then
-			TriggerClientEvent('es_admin:kill', source)
-			setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-			TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-			TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-			TriggerClientEvent("gabs:setneeds", source, 0)
+			TriggerClientEvent('gabs:needskill', source)
 			CancelEvent()
 		end
       else
@@ -147,7 +140,7 @@ AddEventHandler('gabs:removewater', function(source, waterdrops)
 end)
 
 RegisterServerEvent('gabs:addwater')
-AddEventHandler('gabs:addwater', function(source, waterdrops)
+AddEventHandler('gabs:addwater', function(waterdrops)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -160,11 +153,7 @@ AddEventHandler('gabs:addwater', function(source, waterdrops)
 		TriggerClientEvent("gabs:drink", source)
         CancelEvent()
 		if(tonumber(new_water) <= 0) then
-			TriggerClientEvent('es_admin:kill', source)
-			setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-			TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-			TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-			TriggerClientEvent("gabs:setneeds", source, 0)
+			TriggerClientEvent('gabs:needskill', source)
 			CancelEvent()
 		end
       else
@@ -173,33 +162,32 @@ AddEventHandler('gabs:addwater', function(source, waterdrops)
       end
   end)
 end)
-
-TriggerEvent('es:addCommand', 'boire', function(source, args, user)
-	if(tonumber(args[2])) then
-		local waterdrops = tonumber(args[2])
-		TriggerEvent('gabs:addwater', source, waterdrops)
-	else
-		TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "Exemple : /boire 50")
-	end
-end)
 -- NEEDS
 function addneeds(player, wc)
   local food, water, needs = table.unpack{checkneeds(player)}
   local new_needs = needs + wc
+  if(tonumber(new_needs) >= tonumber(malusneeds)) then
+	new_needs = malusneeds
+  elseif(tonumber(new_needs) <= 0) then
+    new_needs = 0
+  end
   MySQL:executeQuery("UPDATE users SET `needs`='@value' WHERE identifier = '@identifier'", {['@value'] = new_needs, ['@identifier'] = player})
 end
 
 function removeneeds(player, wc)
   local food, water, needs = table.unpack{checkneeds(player)}
   local new_needs = needs - wc
-  if(tonumber(new_needs) <= 0) then
-	new_needs = 0
+  if(tonumber(new_needs) >= tonumber(malusneeds)) then
+	new_needs = malusneeds
+  elseif(tonumber(new_needs) <= 0) then
+    new_needs = 0
   end
   MySQL:executeQuery("UPDATE users SET `needs`='@value' WHERE identifier = '@identifier'", {['@value'] = new_needs, ['@identifier'] = player})
 end
 
 RegisterServerEvent('gabs:removeneeds')
-AddEventHandler('gabs:removeneeds', function(source, wc)
+--AddEventHandler('gabs:removeneeds', function(source, wc)
+AddEventHandler('gabs:removeneeds', function(wc)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -212,11 +200,7 @@ AddEventHandler('gabs:removeneeds', function(source, wc)
 		TriggerClientEvent("gabs:pee", source)
         CancelEvent()
 		if(tonumber(new_needs) >= tonumber(malusneeds)) then
-			TriggerClientEvent('es_admin:kill', source)
-			setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-			TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-			TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-			TriggerClientEvent("gabs:setneeds", source, 0)
+			TriggerClientEvent('gabs:needskill', source)
 			CancelEvent()
 		end
       else
@@ -227,7 +211,7 @@ AddEventHandler('gabs:removeneeds', function(source, wc)
 end)
 
 RegisterServerEvent('gabs:addneeds')
-AddEventHandler('gabs:addneeds', function(source, wc)
+AddEventHandler('gabs:addneeds', function(wc)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -238,32 +222,27 @@ AddEventHandler('gabs:addneeds', function(source, wc)
 --        TriggerClientEvent("gabs:add_needs", source, wc)
         CancelEvent()
 		if(tonumber(new_needs) >= tonumber(malusneeds)) then
-			TriggerClientEvent('es_admin:kill', source)
-			setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-			TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-			TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-			TriggerClientEvent("gabs:setneeds", source, 0)
+			TriggerClientEvent('gabs:needskill', source)
 			CancelEvent()
 		end
       else
 --        TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "Mort")
-		TriggerClientEvent('es_admin:kill', source)
-		setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-		TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-		TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-		TriggerClientEvent("gabs:setneeds", source, 0)
+		TriggerClientEvent('gabs:needskill', source)
         CancelEvent()
       end
   end)
 end)
-
-TriggerEvent('es:addCommand', 'pipi', function(source, args, user)
-	if(tonumber(args[2])) then
-		local wc = tonumber(args[2])
-		TriggerEvent('gabs:removeneeds', source, wc)
-	else
-		TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "Exemple : /pipi 50")
-	end
+--SET DEFAULT NEEDS
+RegisterServerEvent('gabs:setdefaultneeds')
+AddEventHandler('gabs:setdefaultneeds', function()
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+	local player = user.identifier
+	setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
+	TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
+	TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
+	TriggerClientEvent("gabs:setneeds", source, 0)
+	CancelEvent()
+  end)
 end)
 -- START NEEDS
 AddEventHandler('es:playerLoaded', function(source)
@@ -293,20 +272,11 @@ local function saveneeds()
 --					TriggerClientEvent("gabs:add_needs", source, bonusneeds)
 					CancelEvent()
 					if(tonumber(new_food) <= 0) or (tonumber(new_water) <= 0) or (tonumber(new_needs) >= tonumber(malusneeds)) then
-						TriggerClientEvent('es_admin:kill', source)
-						setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-						TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-						TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-						TriggerClientEvent("gabs:setneeds", source, 0)
+						TriggerClientEvent('gabs:needskill', source)
 						CancelEvent()
 					end
 				else
-					TriggerClientEvent('es_admin:kill', source)
-					setneeds(player, tonumber(bonusfood), tonumber(bonuswater), 0)
-					TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
-					TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
-					TriggerClientEvent("gabs:setneeds", source, 0)
---					TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "Mort")
+					TriggerClientEvent('gabs:needskill', source)
 					CancelEvent()
 				end
 			end
