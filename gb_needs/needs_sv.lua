@@ -1,13 +1,13 @@
 require "resources/essentialmode/lib/MySQL"
 MySQL:open("127.0.0.1", "gta5_gamemode_essential", "root", "monpasse")
 -- PARAMS
-local malusfood = 1
+local malusfood = 10
 local bonusfood = 100
-local maluswater = 2
+local maluswater = 20
 local bonuswater = 100
 local malusneeds = 100
-local bonusneeds = 1
-local timingsave = 10000
+local bonusneeds = 10
+local timingsave = 600000
 -- CHECK NEEDS
 function checkneeds(player)
   local executed_query = MySQL:executeQuery("SELECT * FROM users WHERE identifier = '@name'", {['@name'] = player})
