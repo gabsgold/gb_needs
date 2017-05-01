@@ -16,6 +16,10 @@ TriggerServerEvent('gabs:addwater', waterdrops)
 
 TriggerServerEvent('gabs:removeneeds', wc)
 
+#Ajoute un certain nombre à toutes les variables (sans animation) :
+
+TriggerServerEvent('gabs:addcustomneeds', calories, waterdrops, wc)
+
 #Toutes les valeurs par défaut :
 
 TriggerServerEvent('gabs:setdefaultneeds')
