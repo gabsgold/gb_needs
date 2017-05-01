@@ -1,13 +1,13 @@
 require "resources/essentialmode/lib/MySQL"
 MySQL:open("127.0.0.1", "gta5_gamemode_essential", "root", "monpasse")
 -- PARAMS
-local malusfood = 10
+local malusfood = 1
 local bonusfood = 100
-local maluswater = 20
+local maluswater = 2
 local bonuswater = 100
 local malusneeds = 100
-local bonusneeds = 10
-local timingsave = 600000
+local bonusneeds = 1
+local timingsave = 10000
 -- CHECK NEEDS
 function checkneeds(player)
   local executed_query = MySQL:executeQuery("SELECT * FROM users WHERE identifier = '@name'", {['@name'] = player})
@@ -20,6 +20,29 @@ function updateneeds(player, calories, waterdrops, wc)
   local new_food = food - calories
   local new_water = water - waterdrops
   local new_needs = needs + wc
+  MySQL:executeQuery("UPDATE users SET `food`='@foodvalue', `water`='@watervalue', `needs`='@needsvalue' WHERE identifier = '@identifier'", {['@foodvalue'] = new_food, ['@watervalue'] = new_water, ['@needsvalue'] = new_needs, ['@identifier'] = player})
+end
+-- CUSTOM UPDATE NEEDS
+function customupdateneeds(player, calories, waterdrops, wc)
+  local food, water, needs = table.unpack{checkneeds(player)}
+  local new_food = food + calories
+  if(tonumber(new_food) >= tonumber(bonusfood)) then
+	new_food = bonusfood
+  elseif(tonumber(new_food) <= 0) then
+    new_food = 0
+  end
+  local new_water = water + waterdrops
+  if(tonumber(new_water) >= tonumber(bonuswater)) then
+	new_water = bonuswater
+  elseif(tonumber(new_water) <= 0) then
+    new_water = 0
+  end
+  local new_needs = needs - wc
+  if(tonumber(new_needs) >= tonumber(malusneeds)) then
+	new_needs = malusneeds
+  elseif(tonumber(new_needs) <= 0) then
+    new_needs = 0
+  end
   MySQL:executeQuery("UPDATE users SET `food`='@foodvalue', `water`='@watervalue', `needs`='@needsvalue' WHERE identifier = '@identifier'", {['@foodvalue'] = new_food, ['@watervalue'] = new_water, ['@needsvalue'] = new_needs, ['@identifier'] = player})
 end
 -- SET NEEDS
@@ -241,6 +264,19 @@ AddEventHandler('gabs:setdefaultneeds', function()
 	TriggerClientEvent("gabs:setfood", source, tonumber(bonusfood))
 	TriggerClientEvent("gabs:setwater", source, tonumber(bonuswater))
 	TriggerClientEvent("gabs:setneeds", source, 0)
+	CancelEvent()
+  end)
+end)
+--ADD CUSTOM NEEDS
+RegisterServerEvent('gabs:addcustomneeds')
+AddEventHandler('gabs:addcustomneeds', function(calories, waterdrops, wc)
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+	local player = user.identifier
+	customupdateneeds(player, calories, waterdrops, wc)
+	local food, water, needs = table.unpack{checkneeds(player)}
+	TriggerClientEvent("gabs:setfood", source, food)
+	TriggerClientEvent("gabs:setwater", source, water)
+	TriggerClientEvent("gabs:setneeds", source, needs)
 	CancelEvent()
   end)
 end)
