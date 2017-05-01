@@ -6,22 +6,18 @@ Créer les colonnes "food" (valeur par défaut DOUBLE 100), "water" (valeur par 
 
 #Ajoute un certain nombre de "calories" :
 
-TriggerEvent('gabs:addcalories', source, calories)
-
-TriggerServerEvent('gabs:addcalories', source, calories)
+TriggerServerEvent('gabs:addcalories', calories)
 
 #Ajoute un certain nombre de "waterdrops" :
 
-TriggerEvent('gabs:addwater', source, waterdrops)
-
-TriggerServerEvent('gabs:addwater', source, waterdrops)
+TriggerServerEvent('gabs:addwater', waterdrops)
 
 #Enlève un certain nombre de "wc" :
 
-TriggerEvent('gabs:removeneeds', source, wc)
+TriggerServerEvent('gabs:removeneeds', wc)
 
-TriggerServerEvent('gabs:removeneeds', source, wc)
+#Toutes les valeurs par défaut :
 
-#Commands = /boire /manger /pipi
+TriggerServerEvent('gabs:setdefaultneeds')
 
-Build 30.04.2017
+#Build 01.05.2017
