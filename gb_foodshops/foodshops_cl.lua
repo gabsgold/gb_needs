@@ -29,10 +29,8 @@ Citizen.CreateThread(function()
 		for k,v in ipairs(twentyfourseven_shops) do
 			if(Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 20.0)then
 				DrawMarker(1, v.x, v.y, v.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, 1.5001, 0, 25, 165, 165, 0,0, 0,0)
-
 				if(Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 1.0)then
 					DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour acheter un ~y~menu~w~ à ~g~20~w~$.")
-
 					if(IsControlJustReleased(1, 51))then
 						TriggerServerEvent('gabs:menu')
 						TriggerServerEvent('gabs:addcustomneeds', 100, 100, -10)
@@ -42,6 +40,11 @@ Citizen.CreateThread(function()
 			end
 		end
 	end
+end)
+
+RegisterNetEvent('gabs:remneeds')
+AddEventHandler('gabs:remneeds', function(source, wc)
+	TriggerServerEvent('gabs:removeneeds', source, wc)
 end)
 
 function Texte(_texte, showtime)
