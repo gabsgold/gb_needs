@@ -1,4 +1,7 @@
 local prixmenu = 20
+local foodmenu = 100
+local watermenu = 100
+local needsmenu = -10
 local wc = 100
 
 RegisterServerEvent('gabs:menu')
@@ -6,6 +9,7 @@ AddEventHandler('gabs:menu', function()
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		if(user.money >= prixmenu)then
 			user:removeMoney(prixmenu)
+			TriggerEvent('gabs:addcustomneeds', source, foodmenu, watermenu, needsmenu)
 		end
 	end)
 end)
@@ -16,7 +20,7 @@ AddEventHandler('chatMessage', function(source, name, message)
 		local cmd = args[1]
 		if (cmd == "/pipi") then
 			CancelEvent()
-			TriggerClientEvent("gabs:remneeds", source, wc)
+			TriggerEvent('gabs:removeneeds', source, wc)
 		end
 	end
 end)

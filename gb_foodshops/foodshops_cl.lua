@@ -33,26 +33,12 @@ Citizen.CreateThread(function()
 					DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour acheter un ~y~menu~w~ à ~g~20~w~$.")
 					if(IsControlJustReleased(1, 51))then
 						TriggerServerEvent('gabs:menu')
-						TriggerServerEvent('gabs:addcustomneeds', 100, 100, -10)
-						Texte("Vous avez acheté un ~y~menu~s~ pour ~g~20~s~$", 5000)
 					end
 				end
 			end
 		end
 	end
 end)
-
-RegisterNetEvent('gabs:remneeds')
-AddEventHandler('gabs:remneeds', function(source, wc)
-	TriggerServerEvent('gabs:removeneeds', source, wc)
-end)
-
-function Texte(_texte, showtime)
-    ClearPrints()
-	SetTextEntry_2("STRING")
-	AddTextComponentString(_texte)
-	DrawSubtitleTimed(showtime, 1)
-end
 
 function DisplayHelpText(str)
 	SetTextComponentFormat("STRING")
