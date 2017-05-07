@@ -8,3 +8,14 @@ files {
 
 client_script "needs_cl.lua"
 server_script "needs_sv.lua"
+
+export 'checkneeds'
+export 'updateneeds'
+export 'customupdateneeds'
+export 'setneeds'
+export 'addcalories'
+export 'removecalories'
+export 'addwater'
+export 'removewater'
+export 'addneeds'
+export 'removeneeds'
