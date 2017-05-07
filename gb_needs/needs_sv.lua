@@ -73,7 +73,7 @@ function removecalories(player, calories)
 end
 
 RegisterServerEvent('gabs:removecalories')
-AddEventHandler('gabs:removecalories', function(calories)
+AddEventHandler('gabs:removecalories', function(source, calories)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -95,7 +95,7 @@ AddEventHandler('gabs:removecalories', function(calories)
 end)
 
 RegisterServerEvent('gabs:addcalories')
-AddEventHandler('gabs:addcalories', function(calories)
+AddEventHandler('gabs:addcalories', function(source, calories)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -141,7 +141,7 @@ function removewater(player, waterdrops)
 end
 
 RegisterServerEvent('gabs:removewater')
-AddEventHandler('gabs:removewater', function(waterdrops)
+AddEventHandler('gabs:removewater', function(source, waterdrops)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -163,7 +163,7 @@ AddEventHandler('gabs:removewater', function(waterdrops)
 end)
 
 RegisterServerEvent('gabs:addwater')
-AddEventHandler('gabs:addwater', function(waterdrops)
+AddEventHandler('gabs:addwater', function(source, waterdrops)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -209,8 +209,8 @@ function removeneeds(player, wc)
 end
 
 RegisterServerEvent('gabs:removeneeds')
---AddEventHandler('gabs:removeneeds', function(source, wc)
-AddEventHandler('gabs:removeneeds', function(wc)
+AddEventHandler('gabs:removeneeds', function(source, wc)
+--AddEventHandler('gabs:removeneeds', function(wc)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -234,7 +234,7 @@ AddEventHandler('gabs:removeneeds', function(wc)
 end)
 
 RegisterServerEvent('gabs:addneeds')
-AddEventHandler('gabs:addneeds', function(wc)
+AddEventHandler('gabs:addneeds', function(source, wc)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local player = user.identifier
       local food, water, needs = table.unpack{checkneeds(player)}
@@ -269,7 +269,7 @@ AddEventHandler('gabs:setdefaultneeds', function()
 end)
 --ADD CUSTOM NEEDS
 RegisterServerEvent('gabs:addcustomneeds')
-AddEventHandler('gabs:addcustomneeds', function(calories, waterdrops, wc)
+AddEventHandler('gabs:addcustomneeds', function(source, calories, waterdrops, wc)
   TriggerEvent('es:getPlayerFromId', source, function(user)
 	local player = user.identifier
 	customupdateneeds(player, calories, waterdrops, wc)
