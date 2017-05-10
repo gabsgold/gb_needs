@@ -300,19 +300,19 @@ local function saveneeds()
 				if(tonumber(food) >= 1) and (tonumber(water) >= 1) and (tonumber(needs) < tonumber(malusneeds)) then
 					updateneeds(player, malusfood, maluswater, bonusneeds)
 					local new_food, new_water, new_needs = table.unpack{checkneeds(player)}
-					TriggerClientEvent("gabs:setfood", source, new_food)
---					TriggerClientEvent("gabs:remove_calories", source, malusfood)
-					TriggerClientEvent("gabs:setwater", source, new_water)
---					TriggerClientEvent("gabs:remove_water", source, maluswater)
-					TriggerClientEvent("gabs:setneeds", source, new_needs)
---					TriggerClientEvent("gabs:add_needs", source, bonusneeds)
+					TriggerClientEvent("gabs:setfood", v, new_food)
+--					TriggerClientEvent("gabs:remove_calories", v, malusfood)
+					TriggerClientEvent("gabs:setwater", v, new_water)
+--					TriggerClientEvent("gabs:remove_water", v, maluswater)
+					TriggerClientEvent("gabs:setneeds", v, new_needs)
+--					TriggerClientEvent("gabs:add_needs", v, bonusneeds)
 					CancelEvent()
 					if(tonumber(new_food) <= 0) or (tonumber(new_water) <= 0) or (tonumber(new_needs) >= tonumber(malusneeds)) then
-						TriggerClientEvent('gabs:needskill', source)
+						TriggerClientEvent('gabs:needskill', v)
 						CancelEvent()
 					end
 				else
-					TriggerClientEvent('gabs:needskill', source)
+					TriggerClientEvent('gabs:needskill', v)
 					CancelEvent()
 				end
 			end
