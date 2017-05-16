@@ -1,0 +1,7 @@
+METTRE DANS LE DOSSIER "vdk_inventory".
+
+AJOUTER "server_script 'needsvdk_sv.lua'" ET "client_script 'needsvdk_cl.lua'" DANS LE FICHIER "__resource.lua" DE "vdk_inventory".
+
+AJOUTER LE BOUTON "Menu.addButton("Utiliser", "eatvdk", { itemId, 1 })" DANS LA FONCTION "ItemMenu(itemId)" DU FICHIER "vdkinv.lua".
+
+AJOUTER DES ITEMS DANS LA BD AVEC LES COLONNES "food", "water" ET "needs" (id | libelle | food | water | needs).
