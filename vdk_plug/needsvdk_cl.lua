@@ -34,11 +34,15 @@ end
 -- export 'getQuantity'
 -- export 'notFull'
 
+-------------------------------------------------------------
+--DEV TEST A SUPPRIMER
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-        if IsControlJustPressed(1, 11) then
+        if IsControlJustPressed(1, 11) then --PAGEDOWN
+			TriggerEvent('player:receiveItem',30, 1)
             TriggerEvent('player:receiveItem',31, 1)
         end
     end
 end)
+------------------------------------------------------------
