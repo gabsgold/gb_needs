@@ -41,7 +41,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         if IsControlJustPressed(1, 11) then --PAGEDOWN
 			TriggerEvent('player:receiveItem',30, 1)
-            TriggerEvent('player:receiveItem',31, 1)
+			TriggerEvent('player:receiveItem',31, 1)
         end
     end
 end)
