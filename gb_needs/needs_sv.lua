@@ -366,7 +366,7 @@ local function watersave()
 				for k,v in pairs(users)do
 					local player = v.identifier
 					local food, water, needs = table.unpack{checkneeds(player)}
-					if (tonumber(food) >= 1) then
+					if (tonumber(water) >= 1) then
 						updateneeds(player, 0, maluswater, 0)
 						local new_food, new_water, new_needs = table.unpack{checkneeds(player)}
 						TriggerClientEvent("gabs:setwater", k, new_water)
