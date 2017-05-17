@@ -22,6 +22,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
+local showfoodmenu = true
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -30,10 +31,18 @@ Citizen.CreateThread(function()
 			if(Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 20.0)then
 				DrawMarker(1, v.x, v.y, v.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, 1.5001, 0, 25, 165, 165, 0,0, 0,0)
 				if(Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 1.0)then
-					DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour acheter un ~y~menu~w~ à ~g~20~w~$.")
+					DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour acheter un ~y~menu~w~.")
 					if(IsControlJustReleased(1, 51))then
-						TriggerServerEvent('gabs:menu')
+						if showfoodmenu then
+							ShopMenu()
+							Menu.hidden = false
+							showfoodmenu = false
+						else
+							Menu.hidden = true
+							showfoodmenu = true
+						end
 					end
+					Menu.renderGUI()
 				end
 			end
 		end

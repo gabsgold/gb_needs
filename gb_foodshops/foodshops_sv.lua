@@ -1,15 +1,20 @@
-local prixmenu = 20
-local foodmenu = 100
-local watermenu = 100
-local needsmenu = -10
 local wc = 100
 
 RegisterServerEvent('gabs:menu')
-AddEventHandler('gabs:menu', function()
+AddEventHandler('gabs:menu', function(fooditem)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
-		if(user.money >= prixmenu)then
-			user:removeMoney(prixmenu)
-			TriggerEvent('gabs:addcustomneeds', source, foodmenu, watermenu, needsmenu)
+		for k,v in ipairs(fooditems) do
+			if (v.name == fooditem) then
+				if (user.money >= v.price) then
+					user:removeMoney(v.price)
+					TriggerEvent('gabs:addcustomneeds', source, v.food, v.water, v.needs)
+					if (v.food == 0) then
+						TriggerClientEvent("gabs:drink", source)
+					else
+						TriggerClientEvent("gabs:eat", source)
+					end
+				end
+			end
 		end
 	end)
 end)
