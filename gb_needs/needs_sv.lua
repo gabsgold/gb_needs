@@ -2,12 +2,18 @@ require "resources/essentialmode/lib/MySQL"
 MySQL:open("127.0.0.1", "gta5_gamemode_essential", "root", "monpasse")
 -- PARAMS
 local malusfood = 10
-local bonusfood = 100
+local bonusfood = 100 -- MAX FOOD
 local maluswater = 20
-local bonuswater = 100
-local malusneeds = 100
+local bonuswater = 100 -- MAX WATER
+local malusneeds = 100 -- MAX NEEDS
 local bonusneeds = 10
-local timingsave = 600000
+-- GLOBAL TIMER
+local globaltimer = true
+local globaltime = 600000
+-- INDIVIDUAL TIMERS (globaltimer = false)
+local foodtimer = 90000
+local watertimer = 60000
+local needstimer = 120000
 -- CHECK NEEDS
 function checkneeds(player)
   local executed_query = MySQL:executeQuery("SELECT * FROM users WHERE identifier = '@name'", {['@name'] = player})
@@ -290,36 +296,123 @@ AddEventHandler('es:playerLoaded', function(source)
 	  TriggerClientEvent("gabs:setneeds", source, needs)
     end)
 end)
-
+-- GLOBAL SAVE
 local function saveneeds()
-	SetTimeout(timingsave, function()
-		TriggerEvent("es:getPlayers", function(users)
-			for k,v in pairs(users)do
-				local player = v.identifier
-				local food, water, needs = table.unpack{checkneeds(player)}
-				if(tonumber(food) >= 1) and (tonumber(water) >= 1) and (tonumber(needs) < tonumber(malusneeds)) then
-					updateneeds(player, malusfood, maluswater, bonusneeds)
-					local new_food, new_water, new_needs = table.unpack{checkneeds(player)}
-					TriggerClientEvent("gabs:setfood", k, new_food)
---					TriggerClientEvent("gabs:remove_calories", k, malusfood)
-					TriggerClientEvent("gabs:setwater", k, new_water)
---					TriggerClientEvent("gabs:remove_water", k, maluswater)
-					TriggerClientEvent("gabs:setneeds", k, new_needs)
---					TriggerClientEvent("gabs:add_needs", k, bonusneeds)
-					CancelEvent()
-					if(tonumber(new_food) <= 0) or (tonumber(new_water) <= 0) or (tonumber(new_needs) >= tonumber(malusneeds)) then
+	if globaltimer then
+		SetTimeout(globaltime, function()
+			TriggerEvent("es:getPlayers", function(users)
+				for k,v in pairs(users)do
+					local player = v.identifier
+					local food, water, needs = table.unpack{checkneeds(player)}
+					if(tonumber(food) >= 1) and (tonumber(water) >= 1) and (tonumber(needs) < tonumber(malusneeds)) then
+						updateneeds(player, malusfood, maluswater, bonusneeds)
+						local new_food, new_water, new_needs = table.unpack{checkneeds(player)}
+						TriggerClientEvent("gabs:setfood", k, new_food)
+--						TriggerClientEvent("gabs:remove_calories", k, malusfood)
+						TriggerClientEvent("gabs:setwater", k, new_water)
+--						TriggerClientEvent("gabs:remove_water", k, maluswater)
+						TriggerClientEvent("gabs:setneeds", k, new_needs)
+--						TriggerClientEvent("gabs:add_needs", k, bonusneeds)
+						CancelEvent()
+						if(tonumber(new_food) <= 0) or (tonumber(new_water) <= 0) or (tonumber(new_needs) >= tonumber(malusneeds)) then
+							TriggerClientEvent('gabs:needskill', k)
+							CancelEvent()
+						end
+					else
 						TriggerClientEvent('gabs:needskill', k)
 						CancelEvent()
 					end
-				else
-					TriggerClientEvent('gabs:needskill', k)
-					CancelEvent()
 				end
-			end
+			end)
+			saveneeds()
 		end)
-
-		saveneeds()
-	end)
+	end
 end
-
 saveneeds()
+-- INDIVIDUAL SAVES
+local function foodsave()
+	if (globaltimer == false) then
+		SetTimeout(foodtimer, function()
+			TriggerEvent("es:getPlayers", function(users)
+				for k,v in pairs(users)do
+					local player = v.identifier
+					local food, water, needs = table.unpack{checkneeds(player)}
+					if (tonumber(food) >= 1) then
+						updateneeds(player, malusfood, 0, 0)
+						local new_food, new_water, new_needs = table.unpack{checkneeds(player)}
+						TriggerClientEvent("gabs:setfood", k, new_food)
+--						TriggerClientEvent("gabs:remove_calories", k, malusfood)
+						CancelEvent()
+						if (tonumber(new_food) <= 0) then
+							TriggerClientEvent('gabs:needskill', k)
+							CancelEvent()
+						end
+					else
+						TriggerClientEvent('gabs:needskill', k)
+						CancelEvent()
+					end
+				end
+			end)
+			foodsave()
+		end)
+	end
+end
+foodsave()
+
+local function watersave()
+	if (globaltimer == false) then
+		SetTimeout(watertimer, function()
+			TriggerEvent("es:getPlayers", function(users)
+				for k,v in pairs(users)do
+					local player = v.identifier
+					local food, water, needs = table.unpack{checkneeds(player)}
+					if (tonumber(food) >= 1) then
+						updateneeds(player, 0, maluswater, 0)
+						local new_food, new_water, new_needs = table.unpack{checkneeds(player)}
+						TriggerClientEvent("gabs:setwater", k, new_water)
+--						TriggerClientEvent("gabs:remove_water", k, maluswater)
+						CancelEvent()
+						if (tonumber(new_water) <= 0) then
+							TriggerClientEvent('gabs:needskill', k)
+							CancelEvent()
+						end
+					else
+						TriggerClientEvent('gabs:needskill', k)
+						CancelEvent()
+					end
+				end
+			end)
+			watersave()
+		end)
+	end
+end
+watersave()
+
+local function needssave()
+	if (globaltimer == false) then
+		SetTimeout(needstimer, function()
+			TriggerEvent("es:getPlayers", function(users)
+				for k,v in pairs(users)do
+					local player = v.identifier
+					local food, water, needs = table.unpack{checkneeds(player)}
+					if (tonumber(needs) < tonumber(malusneeds)) then
+						updateneeds(player, 0, 0, bonusneeds)
+						local new_food, new_water, new_needs = table.unpack{checkneeds(player)}
+						TriggerClientEvent("gabs:setneeds", k, new_needs)
+--						TriggerClientEvent("gabs:add_needs", k, bonusneeds)
+						CancelEvent()
+						if (tonumber(new_needs) >= tonumber(malusneeds)) then
+							TriggerClientEvent('gabs:needskill', k)
+							CancelEvent()
+						end
+					else
+						TriggerClientEvent('gabs:needskill', k)
+						CancelEvent()
+					end
+				end
+			end)
+			needssave()
+		end)
+	end
+end
+needssave()
