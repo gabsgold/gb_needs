@@ -155,20 +155,34 @@ function Texte(_texte, showtime)
 	DrawSubtitleTimed(showtime, 1)
 end
 --------------------------------------------------------------------------------------------------------------------
+local vdkinventory = false
 function ShopMenu()
 	ClearMenu()
-	Menu.addTitle("MENU")
-	Menu.addButton("Burger","buymenu",'Burger')
-	Menu.addButton("Cola","buymenu",'Cola')
-	Menu.addButton("Water","buymenu",'Water')
-	Menu.addButton("Snack","buymenu",'Snack')
-	Menu.addButton("Fries","buymenu",'Fries')
-	Menu.addButton("Apple","buymenu",'Apple')
-	Menu.addButton("Orange","buymenu",'Orange')
-	-- ...
+	if (vdkinventory == false) then
+		Menu.addTitle("MENU")
+		Menu.addButton("Burger","buymenu",'Burger')
+		Menu.addButton("Cola","buymenu",'Cola')
+		Menu.addButton("Water","buymenu",'Water')
+		Menu.addButton("Snack","buymenu",'Snack')
+		Menu.addButton("Fries","buymenu",'Fries')
+		Menu.addButton("Apple","buymenu",'Apple')
+		Menu.addButton("Orange","buymenu",'Orange')
+	else
+		Menu.addTitle("MENU")
+		Menu.addButton("Sandwich","buymenu",{ 30, 1, 200 })
+		Menu.addButton("Cola","buymenu",{ 31, 1, 123 })
+--		Menu.addButton("FoodName","buymenu",{ itemId, qty, price }) -- itemId = id de l'item vdk (Table : items), qty = quantité et price = prix
+	end
 end
 
 function buymenu(fooditem)
-	Texte("Vous avez mangé un(e) ~g~".. fooditem, 5000)
-	TriggerServerEvent('gabs:menu', fooditem)
+	if (vdkinventory == false) then
+		Texte("Vous avez mangé un(e) ~g~".. fooditem, 5000)
+		TriggerServerEvent('gabs:menu', fooditem, vdkinventory)
+	else
+		local itemId = fooditem[1]
+		local qty = fooditem[2]
+		local price = fooditem[3]
+		TriggerServerEvent('gabs:menu', {fooditem[1], fooditem[2], fooditem[3]}, vdkinventory)
+	end
 end
