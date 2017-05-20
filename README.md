@@ -1,4 +1,4 @@
-# gb_needs
+# gb_needs (Pour développeur)
 Dependencies = ESSENTIALMODE
 
 # How to :
