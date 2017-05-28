@@ -8,6 +8,12 @@ local twentyfourseven_shops = {
 	{ ['x'] = -1223.6690673828, ['y'] = -906.67517089844, ['z'] = 12.326356887817 },
 	{ ['x'] = -708.19256591797, ['y'] = -914.65264892578, ['z'] = 19.215591430664 },
 	{ ['x'] = 26.419162750244, ['y'] = -1347.5804443359, ['z'] = 29.497024536133 },
+	{ ['x'] = 1135.67, ['y'] = -982.177, ['z'] = 46.4158 },
+	{ ['x'] = -47.124, ['y'] = -1756.52, ['z'] = 29.421 },
+	{ ['x'] = -1487.48, ['y'] = -378.918, ['z'] = 40.1634},
+	{ ['x'] = 374.208, ['y'] = 328.134, ['z'] = 103.566 },
+	{ ['x'] = 2676.99, ['y'] = 3281.37, ['z'] = 55.2412 },
+	{ ['x'] = -2967.86, ['y'] = 391.037, ['z'] = 15.0433 },
 }
 
 Citizen.CreateThread(function()
@@ -17,7 +23,7 @@ Citizen.CreateThread(function()
 		SetBlipScale(blip, 0.8)
 		SetBlipAsShortRange(blip, true)
 		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString("FOOD")
+		AddTextComponentString("Station service")
 		EndTextCommandSetBlipName(blip)
 	end
 end)
